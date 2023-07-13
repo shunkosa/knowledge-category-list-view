@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>KCLV_CollapseAll</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>KCLV_CollapseAll</shortDescription>
+        <value>Collapse All</value>
+    </labels>
+    <labels>
+        <fullName>KCLV_ExpandAll</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>KCLV_ExpandAll</shortDescription>
+        <value>Expand All</value>
+    </labels>
+    <labels>
+        <fullName>KCLV_Search</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>KCLV_Search</shortDescription>
+        <value>Search</value>
+    </labels>
+    <labels>
+        <fullName>KCLV_Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>KCLV_Title</shortDescription>
+        <value>Knowledge Search by Category</value>
+    </labels>
+    <labels>
+        <fullName>KCLV_MessageArticleFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>KCLV_MessageArticleFound</shortDescription>
+        <value>{0} article(s) found.</value>
+    </labels>
+    <labels>
+        <fullName>KCLV_MessageArticleNotFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>KCLV_MessageArticleNotFound</shortDescription>
+        <value>No articles found by the selected category.</value>
+    </labels>
+</CustomLabels>

@@ -2,6 +2,13 @@ import { LightningElement, track } from 'lwc';
 import getCategoryTree from '@salesforce/apex/KnowledgeCategoryListViewController.getCategoryTree';
 import getArticles from '@salesforce/apex/KnowledgeCategoryListViewController.getArticles';
 
+import KCLV_Title from '@salesforce/label/c.KCLV_Title';
+import KCLV_ExpandAll from '@salesforce/label/c.KCLV_ExpandAll';
+import KCLV_CollapseAll from '@salesforce/label/c.KCLV_CollapseAll';
+import KCLV_Search from '@salesforce/label/c.KCLV_Search';
+import KCLV_MessageArticleFound from '@salesforce/label/c.KCLV_MessageArticleFound';
+import KCLV_MessageArticleNotFound from '@salesforce/label/c.KCLV_MessageArticleNotFound';
+
 const columns = [
     {
         label: '記事番号',
@@ -38,20 +45,35 @@ const columns = [
 
 export default class KnowledgeCategoryListView extends LightningElement {
     loading;
+
     @track trees;
+    columns = columns;
     articles = [];
+
+    selectedCategoryName;
+    selectedCategoryGroupName;
+    searchExecuted;
+
+    label = {
+        KCLV_Title,
+        KCLV_ExpandAll,
+        KCLV_CollapseAll,
+        KCLV_Search,
+        KCLV_MessageArticleFound,
+        KCLV_MessageArticleNotFound
+    };
+
     async connectedCallback() {
         this.loading = true;
         const result = await getCategoryTree();
         this.trees = result;
         this.loading = false;
     }
-    selectedCategoryName;
-    selectedCategoryGroupName;
-    searchExecuted;
 
-    columns = columns;
-
+    /**
+     * Event handler on tree item selected
+     * @param {*} event
+     */
     handleCategorySelected(event) {
         this.selectedCategoryName = event.detail.name;
         // Deselect category on the other category groups
@@ -137,8 +159,8 @@ export default class KnowledgeCategoryListView extends LightningElement {
         return this.articles.length === 0;
     }
 
-    get numOfArticles() {
-        return this.articles.length;
+    get numOfArticlesMessage() {
+        return this.label.KCLV_MessageArticleFound.replaceAll('{0}', this.articles.length);
     }
 
     get tableContainerHeight() {

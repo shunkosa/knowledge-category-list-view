@@ -1,16 +1,16 @@
 <template>
     <lightning-spinner size="large" lwc:if={loading}></lightning-spinner>
-    <lightning-card icon-name="standard:knowledge" title="ナレッジ検索">
+    <lightning-card icon-name="standard:knowledge" title={label.KCLV_Title}>
         <lightning-layout>
             <lightning-layout-item size="3" class="slds-p-horizontal_small">
                 <div class="slds-text-align_right actions slds-p-vertical_small">
                     <div>
                         <lightning-button-group>
-                            <lightning-button label="すべて展開" onclick={expandAll}></lightning-button>
-                            <lightning-button label="すべて閉じる" onclick={collapseAll}></lightning-button>
+                            <lightning-button label={label.KCLV_ExpandAll} onclick={expandAll}></lightning-button>
+                            <lightning-button label={label.KCLV_CollapseAll} onclick={collapseAll}></lightning-button>
                         </lightning-button-group>
                     </div>
-                    <lightning-button label="検索" variant="brand" onclick={search}></lightning-button>
+                    <lightning-button label={label.KCLV_Search} variant="brand" onclick={search}></lightning-button>
                 </div>
                 <template for:each={trees} for:item="tree">
                     <lightning-tree
@@ -25,8 +25,8 @@
             </lightning-layout-item>
             <lightning-layout-item size="9" class="slds-p-horizontal_small">
                 <div lwc:if={searchExecuted} class="slds-p-bottom_small">
-                    <p lwc:if={noArticles}>選択されたカテゴリで公開されているFAQ記事が見つかりませんでした。</p>
-                    <p lwc:else>{numOfArticles}件のFAQ記事が見つかりました。</p>
+                    <p lwc:if={noArticles}>{label.KCLV_MessageArticleNotFound}</p>
+                    <p lwc:else>{numOfArticlesMessage}</p>
                 </div>
                 <div style={tableContainerHeight}>
                     <lightning-datatable key-field="Id" data={articles} columns={columns} hide-checkbox-column>
