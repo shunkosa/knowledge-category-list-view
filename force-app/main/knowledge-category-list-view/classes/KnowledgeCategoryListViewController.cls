@@ -71,6 +71,27 @@ public with sharing class KnowledgeCategoryListViewController {
     }
 
     /**
+     * @description Prepare column for lightning-datatable
+     * @return columns
+     */
+    @AuraEnabled
+    public static List<Column> getFormattedColumns() {
+        List<Column> result = new List<Column>();
+        List<Schema.FieldSetMember> fieldSetMembers = Schema.SObjectType.Knowledge__kav.FieldSets.getMap().get(FIELD_SET_NAME).getFields();
+        for (Schema.FieldSetMember fieldSetMember : fieldSetMembers) {
+            String dataType = String.valueOf(fieldSetMember.getType()).toLowerCase();
+            String label = String.valueOf(fieldSetMember.getLabel());
+            // lightning-datatable doesn't support 'datetime' type
+            if (dataType.equals('datetime')) {
+                dataType = 'date';
+            }
+            Column column = new Column(label, String.valueOf(fieldSetMember.getFieldPath()), dataType);
+            result.add(column);
+        }
+        return result;
+    }
+
+    /**
      * @description Create category tree recursively
      * @param categories category list
      * @param tree current category tree
@@ -138,6 +159,33 @@ public with sharing class KnowledgeCategoryListViewController {
             this.label = label;
             this.name = name;
             this.expanded = false;
+        }
+    }
+
+    /**
+     * @description Column item for datatable
+     */
+    public class Column {
+        @AuraEnabled
+        public String label { get; set; }
+        @AuraEnabled
+        public String fieldName { get; set; }
+        @AuraEnabled
+        public String type { get; set; }
+        @AuraEnabled
+        public Boolean hideDefaultActions { get; set; }
+
+        /**
+         * @description constructor
+         * @param label field label
+         * @param fieldName field api name
+         * @param type field type
+         */
+        public Column(String label, String fieldName, String type) {
+            this.label = label;
+            this.fieldName = fieldName;
+            this.type = type;
+            this.hideDefaultActions = true;
         }
     }
 }

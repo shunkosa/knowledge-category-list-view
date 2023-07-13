@@ -1,6 +1,7 @@
 import { LightningElement, track } from 'lwc';
 import getCategoryTree from '@salesforce/apex/KnowledgeCategoryListViewController.getCategoryTree';
 import getArticles from '@salesforce/apex/KnowledgeCategoryListViewController.getArticles';
+import getFormattedColumns from '@salesforce/apex/KnowledgeCategoryListViewController.getFormattedColumns';
 
 import KCLV_Title from '@salesforce/label/c.KCLV_Title';
 import KCLV_ExpandAll from '@salesforce/label/c.KCLV_ExpandAll';
@@ -9,45 +10,11 @@ import KCLV_Search from '@salesforce/label/c.KCLV_Search';
 import KCLV_MessageArticleFound from '@salesforce/label/c.KCLV_MessageArticleFound';
 import KCLV_MessageArticleNotFound from '@salesforce/label/c.KCLV_MessageArticleNotFound';
 
-const columns = [
-    {
-        label: '記事番号',
-        fieldName: 'Url',
-        type: 'url',
-        typeAttributes: { label: { fieldName: 'ArticleNumber' } },
-        initialWidth: 120
-    },
-    { label: 'タイトル', fieldName: 'Title' },
-    { label: '概要', fieldName: 'Summary' },
-    {
-        label: '作成日',
-        fieldName: 'CreatedDate',
-        type: 'date',
-        initialWidth: 120,
-        typeAttributes: {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }
-    },
-    {
-        label: '最終更新日',
-        fieldName: 'LastModifiedDate',
-        type: 'date',
-        initialWidth: 120,
-        typeAttributes: {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }
-    }
-];
-
 export default class KnowledgeCategoryListView extends LightningElement {
     loading;
 
     @track trees;
-    columns = columns;
+    columns = [];
     articles = [];
 
     selectedCategoryName;
@@ -65,8 +32,11 @@ export default class KnowledgeCategoryListView extends LightningElement {
 
     async connectedCallback() {
         this.loading = true;
-        const result = await getCategoryTree();
-        this.trees = result;
+        this.trees = await getCategoryTree();
+        const columns = await getFormattedColumns();
+        this.columns = columns.map((column, index) => {
+            return this.formatColumn(column, index);
+        });
         this.loading = false;
     }
 
@@ -147,8 +117,9 @@ export default class KnowledgeCategoryListView extends LightningElement {
             categoryGroupName: this.selectedCategoryGroupName,
             categoryName: this.selectedCategoryName
         });
+        console.log(articles);
         this.articles = articles.map((r) => ({
-            Url: `/lightning/r/${r.Id}/view`,
+            recordUrl: `/lightning/r/${r.Id}/view`,
             ...r
         }));
         this.loading = false;
@@ -165,5 +136,21 @@ export default class KnowledgeCategoryListView extends LightningElement {
 
     get tableContainerHeight() {
         return this.articles.length === 0 ? 'height:2.125rem;' : `height:${this.articles.length * 1.825 + 2.125}rem `;
+    }
+
+    formatColumn(column, index) {
+        if (index === 0) {
+            return {
+                label: column.label,
+                fieldName: 'recordUrl',
+                type: 'url',
+                typeAttributes: {
+                    label: { fieldName: column.fieldName },
+                    tooltip: { fieldName: column.fieldName }
+                },
+                hideDefaultActions: true
+            };
+        }
+        return column;
     }
 }
