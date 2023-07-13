@@ -1,7 +1,7 @@
 /**
  * @description Controller class for knowledge list view
  */
-public with sharing class KnowledgeListViewController {
+public with sharing class KnowledgeCategoryListViewController {
     private static final String SOBJECT_TYPE = 'KnowledgeArticleVersion'; // 'Knowledge__kav' is not available for describeDataCategoryGroups
 
     /**

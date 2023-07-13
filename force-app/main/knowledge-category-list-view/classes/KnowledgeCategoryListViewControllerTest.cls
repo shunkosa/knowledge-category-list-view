@@ -2,12 +2,12 @@
  * @description Test class. Make sure you have at least one active data category group in your org
  */
 @isTest
-public with sharing class KnowledgeListViewControllerTest {
+public with sharing class KnowledgeCategoryListViewControllerTest {
     private static final String SOBJECT_TYPE = 'KnowledgeArticleVersion'; // 'Knowledge__kav' is not available for describeDataCategoryGroups
 
     @isTest
     public static void testGetCategoryTree() {
-        List<KnowledgeListViewController.CategoryTreeResult> result = KnowledgeListViewController.getCategoryTree();
+        List<KnowledgeCategoryListViewController.CategoryTreeResult> result = KnowledgeCategoryListViewController.getCategoryTree();
         Assert.isTrue(result.size() > 0, 'Category trees are not successfully created or there are no category groups.');
     }
 
@@ -50,7 +50,7 @@ public with sharing class KnowledgeListViewControllerTest {
         KbManagement.PublishingService.publishArticle(draftArticle.KnowledgeArticleId, false);
 
         Test.startTest();
-        List<Knowledge__kav> articles = KnowledgeListViewController.getArticles(dataCategoryGroupName, dataCategoryName);
+        List<Knowledge__kav> articles = KnowledgeCategoryListViewController.getArticles(dataCategoryGroupName, dataCategoryName);
         Test.stopTest();
 
         Assert.areEqual(1, articles.size(), 'Failed to query articles');

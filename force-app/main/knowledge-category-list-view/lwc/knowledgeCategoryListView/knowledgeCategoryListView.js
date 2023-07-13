@@ -1,6 +1,6 @@
 import { LightningElement, track } from 'lwc';
-import getCategoryTree from '@salesforce/apex/KnowledgeListViewController.getCategoryTree';
-import getArticles from '@salesforce/apex/KnowledgeListViewController.getArticles';
+import getCategoryTree from '@salesforce/apex/KnowledgeCategoryListViewController.getCategoryTree';
+import getArticles from '@salesforce/apex/KnowledgeCategoryListViewController.getArticles';
 
 const columns = [
     {
@@ -36,7 +36,7 @@ const columns = [
     }
 ];
 
-export default class KnowledgeListView extends LightningElement {
+export default class KnowledgeCategoryListView extends LightningElement {
     loading;
     @track trees;
     articles = [];
