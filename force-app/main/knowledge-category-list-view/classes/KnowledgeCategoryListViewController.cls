@@ -3,7 +3,7 @@
  */
 public with sharing class KnowledgeCategoryListViewController {
     private static final String SOBJECT_TYPE = 'KnowledgeArticleVersion'; // 'Knowledge__kav' is not available for describeDataCategoryGroups
-
+    private static final String FIELD_SET_NAME = 'KCLV_Fields';
     /**
      * @description Create category tree menu
      * @return list of category tree info
@@ -44,11 +44,30 @@ public with sharing class KnowledgeCategoryListViewController {
      */
     @AuraEnabled
     public static List<Knowledge__kav> getArticles(String categoryGroupName, String categoryName) {
-        String queryTemplate = 'SELECT Id, Title, Summary, UrlName, ArticleNumber, CreatedDate, LastModifiedDate FROM Knowledge__kav';
-        String query = String.format(queryTemplate, new List<String> {categoryGroupName + '__c', categoryName + '__c'});
-        System.debug(query);
-        List<Knowledge__kav> result = (List<Knowledge__kav>) Database.query(queryTemplate);
+        String queryTemplate = 'SELECT {0} FROM Knowledge__kav WHERE PublishStatus = \'Online\' WITH DATA CATEGORY {1} AT {2}';
+        String queryFields = getCommaSeparatedQueryFields();
+        String query = String.format(queryTemplate, new List<String> {queryFields, categoryGroupName + '__c', categoryName + '__c'});
+        System.debug(LoggingLevel.DEBUG, query);
+        List<Knowledge__kav> result = (List<Knowledge__kav>) Database.query(query);
         return result;
+    }
+
+    /**
+     * @description Get field names for SOQL
+     */
+    private static String getCommaSeparatedQueryFields() {
+        List<Schema.FieldSetMember> fieldSetMembers = Schema.SObjectType.Knowledge__kav.FieldSets.getMap().get(FIELD_SET_NAME).getFields();
+        List<String> queryFieldNames = new List<String>();
+        for (Schema.FieldSetMember fieldSetMember : fieldSetMembers) {
+            String datatype = String.valueOf(fieldSetMember.getType()).toLowerCase();
+            // Get label when pick list
+            if (datatype.equals('picklist')) {
+                queryFieldNames.add('TOLABEL(' + fieldSetMember.getFieldPath() + ')');
+            } else {
+                queryFieldNames.add(fieldSetMember.getFieldPath());
+            }
+        }
+        return String.join(queryFieldNames, ',');
     }
 
     /**
