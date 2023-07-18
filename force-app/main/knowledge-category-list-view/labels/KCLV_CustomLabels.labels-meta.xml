@@ -42,4 +42,11 @@
         <shortDescription>KCLV_MessageArticleNotFound</shortDescription>
         <value>No articles found by the selected category.</value>
     </labels>
+    <labels>
+        <fullName>KCLV_ErrorHeader</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>KCLV_ErrorHeader</shortDescription>
+        <value>Error retrieving data.</value>
+    </labels>
 </CustomLabels>

@@ -1,16 +1,21 @@
 <template>
     <lightning-spinner size="large" lwc:if={loading}></lightning-spinner>
     <lightning-card icon-name="standard:knowledge" title={label.KCLV_Title}>
-        <lightning-layout>
+        <div class="slds-p-horizontal_small slds-text-align_center" lwc:if={hasError}>
+            <lightning-icon icon-name="utility:error" variant="error"></lightning-icon>
+            <p class="slds-text-color_error"><strong>{label.KCLV_ErrorHeader}</strong></p>
+            <p class="slds-text-color_error">{errorMessage}</p>
+        </div>
+        <lightning-layout lwc:else>
             <lightning-layout-item size="3" class="slds-p-horizontal_small">
-                <div class="slds-text-align_right actions slds-p-vertical_small">
+                <div class="slds-text-align_right actions slds-p-bottom_small">
                     <div>
                         <lightning-button-group>
                             <lightning-button label={label.KCLV_ExpandAll} onclick={expandAll}></lightning-button>
                             <lightning-button label={label.KCLV_CollapseAll} onclick={collapseAll}></lightning-button>
                         </lightning-button-group>
                     </div>
-                    <lightning-button label={label.KCLV_Search} variant="brand" onclick={search}></lightning-button>
+                    <lightning-button label={label.KCLV_Search} variant="brand" onclick={search} disabled={disabledSearchButton}></lightning-button>
                 </div>
                 <template for:each={trees} for:item="tree">
                     <lightning-tree
